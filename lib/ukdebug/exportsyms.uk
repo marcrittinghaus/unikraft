@@ -11,3 +11,5 @@ _uk_asmdumpd
 _uk_asmdumpk
 uk_trace_buffer_free
 uk_trace_buffer_writep
+uk_gdb_init
+uk_gdb_trap

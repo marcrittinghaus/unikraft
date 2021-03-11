@@ -102,4 +102,14 @@ config LIBUKDEBUG_ALL_TRACEPOINTS
 	bool "Enable all tracepoints at once"
 	default n
 endif
+
+config LIBUKDEBUG_GDBSTUB
+	bool "Enable GDB stub"
+	default n
+	depends on ARCH_X86_64
+	depends on PLAT_KVM
+	depends on LIBUKDEBUG_REDIR_PRINTD
+	help
+	  The GDB stub allows connecting the GDB debugger to Unikraft via
+	  serial console.
 endif

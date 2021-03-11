@@ -39,6 +39,7 @@
 #include <uk/arch/types.h>
 #include <uk/plat/console.h>
 #include <uk/assert.h>
+#include <uk/gdbstub.h>
 #include <uk/essentials.h>
 
 #define PLATFORM_MEM_START 0x100000
@@ -262,8 +263,11 @@ void _libkvmplat_entry(void *arg)
 
 	_init_cpufeatures();
 	_libkvmplat_init_console();
+	uk_gdb_init();
 	traps_init();
 	intctrl_init();
+
+	uk_gdb_break();
 
 	uk_pr_info("Entering from KVM (x86)...\n");
 	uk_pr_info("     multiboot: %p\n", mi);

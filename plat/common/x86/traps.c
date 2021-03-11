@@ -56,8 +56,6 @@
 /* Traps handled on both Xen and KVM */
 
 DECLARE_TRAP_EC(divide_error,      "divide error")
-DECLARE_TRAP   (debug,             "debug exception")
-DECLARE_TRAP_EC(int3,              "int3")
 DECLARE_TRAP_EC(overflow,          "overflow")
 DECLARE_TRAP_EC(bounds,            "bounds")
 DECLARE_TRAP_EC(invalid_op,        "invalid opcode")
@@ -99,7 +97,7 @@ static void fault_prologue(void)
 	barrier();
 }
 
-void do_gp_fault(struct __regs *regs, long error_code)
+void do_gp_fault(struct __regs *regs, unsigned long error_code)
 {
 	fault_prologue();
 	uk_pr_crit("GPF rip: %lx, error_code=%lx\n",
@@ -129,4 +127,14 @@ void do_page_fault(struct __regs *regs, unsigned long error_code)
 	dump_mem(regs->rbp);
 	dump_mem(regs->rip);
 	UK_CRASH("Crashing\n");
+}
+
+void do_debug(struct __regs *regs)
+{
+	ukplat_gdb_handle_trap(TRAP_debug, regs, 0);
+}
+
+void do_int3(struct __regs *regs, unsigned long error_code)
+{
+	ukplat_gdb_handle_trap(TRAP_int3, regs, error_code);
 }
