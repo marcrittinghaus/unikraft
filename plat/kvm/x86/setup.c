@@ -267,7 +267,7 @@ void _libkvmplat_entry(void *arg)
 	traps_init();
 	intctrl_init();
 
-	uk_gdb_break();
+	ukplat_gdb_break();
 
 	uk_pr_info("Entering from KVM (x86)...\n");
 	uk_pr_info("     multiboot: %p\n", mi);

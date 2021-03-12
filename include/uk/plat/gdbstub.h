@@ -30,11 +30,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef __UKPLAT_GDBSTUB_H__
-#define __UKPLAT_GDBSTUB_H__
+#ifndef __PLAT_CMN_GDBSTUB_H__
+#define __PLAT_CMN_GDBSTUB_H__
 
-void ukplat_gdb_init(void);
-char ukplat_gdb_getc(void);
-void ukplat_gdb_putc(char c);
+int ukplat_gdb_init(void);
+int ukplat_gdb_getc(void);
+int ukplat_gdb_putc(char c);
 
-#endif /* __UKPLAT_GDBSTUB_H__ */
+#endif /* __PLAT_CMN_GDBSTUB_H__ */

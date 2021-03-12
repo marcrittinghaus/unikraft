@@ -63,39 +63,7 @@ struct __regs {
 	unsigned long ss;
 /* top of stack page */
 };
-
-enum gdb_regs {
-	GDB_X86_REG_RAX,
-	GDB_X86_REG_RBX,
-	GDB_X86_REG_RCX,
-	GDB_X86_REG_RDX,
-	GDB_X86_REG_RSI,
-	GDB_X86_REG_RDI,
-	GDB_X86_REG_RBP,
-	GDB_X86_REG_RSP,
-	GDB_X86_REG_R8,
-	GDB_X86_REG_R9,
-	GDB_X86_REG_R10,
-	GDB_X86_REG_R11,
-	GDB_X86_REG_R12,
-	GDB_X86_REG_R13,
-	GDB_X86_REG_R14,
-	GDB_X86_REG_R15,
-	GDB_X86_REG_RIP,
-	GDB_X86_REG_EFLAGS,
-	GDB_X86_REG_CS,
-	GDB_X86_REG_SS,
-	GDB_X86_REG_DS,
-	GDB_X86_REG_ES,
-	GDB_X86_REG_FS,
-	GDB_X86_REG_GS,
-	GDB_REG_NUM
-};
-
-static inline void uk_gdb_break()
-{
-	__asm__ __volatile__("int3");
-}
+#define ukplat_gdb_break() __asm__ __volatile__("int3")
 #endif /* !__ASSEMBLY__ */
 
 #define __REGS_OFFSETOF_PAD       0

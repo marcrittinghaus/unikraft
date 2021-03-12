@@ -37,6 +37,7 @@
 #include <uk/plat/common/trace.h>
 #include <x86/cpu.h>
 #include <x86/traps.h>
+#include <x86/gdbstub.h>
 #include <uk/print.h>
 #include <uk/assert.h>
 #include <uk/asmdump.h>

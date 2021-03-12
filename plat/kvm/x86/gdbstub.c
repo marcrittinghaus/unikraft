@@ -33,22 +33,24 @@
 #include <uk/plat/gdbstub.h>
 #include <kvm-x86/serial_console.h>
 
-void ukplat_gdb_init(void)
+int ukplat_gdb_init(void)
 {
 	_libkvmplat_init_serial_console();
+	return 0;
 }
 
-char ukplat_gdb_getc(void)
+int ukplat_gdb_getc(void)
 {
 	int r;
 
 	while ((r = _libkvmplat_serial_getc()) < 0)
 		;
 
-	return (char)r;
+	return r;
 }
 
-void ukplat_gdb_putc(char c)
+int ukplat_gdb_putc(char c)
 {
 	_libkvmplat_serial_putc(c);
+	return 0;
 }

@@ -39,34 +39,9 @@
 void ukplat_gdb_handle_trap(int trapnr, struct __regs *regs,
 		unsigned long error_code __unused)
 {
-	struct gdb_dbgstate dbgstate = {0};
+	struct gdb_dbgstate dbgstate;
 
-	dbgstate.regs[GDB_X86_REG_RAX] = regs->rax;
-	dbgstate.regs[GDB_X86_REG_RBX] = regs->rbx;
-	dbgstate.regs[GDB_X86_REG_RCX] = regs->rcx;
-	dbgstate.regs[GDB_X86_REG_RDX] = regs->rdx;
-	dbgstate.regs[GDB_X86_REG_RSI] = regs->rsi;
-	dbgstate.regs[GDB_X86_REG_RDI] = regs->rdi;
-	dbgstate.regs[GDB_X86_REG_RBP] = regs->rbp;
-	dbgstate.regs[GDB_X86_REG_RSP] = regs->rsp;
-	dbgstate.regs[GDB_X86_REG_R8] = regs->r8;
-	dbgstate.regs[GDB_X86_REG_R9] = regs->r9;
-	dbgstate.regs[GDB_X86_REG_R10] = regs->r10;
-	dbgstate.regs[GDB_X86_REG_R11] = regs->r11;
-	dbgstate.regs[GDB_X86_REG_R12] = regs->r12;
-	dbgstate.regs[GDB_X86_REG_R13] = regs->r13;
-	dbgstate.regs[GDB_X86_REG_R14] = regs->r14;
-	dbgstate.regs[GDB_X86_REG_R15] = regs->r15;
-
-	dbgstate.regs[GDB_X86_REG_RIP] = regs->rip;
-	dbgstate.regs[GDB_X86_REG_EFLAGS] = regs->eflags;
-	dbgstate.regs[GDB_X86_REG_CS] = regs->cs;
-	dbgstate.regs[GDB_X86_REG_SS] = regs->ss;
-	//dbgstate.regs[GDB_X86_REG_DS] = 0;
-	//dbgstate.regs[GDB_X86_REG_ES] = 0;
-	//dbgstate.regs[GDB_X86_REG_FS] = 0;
-	//dbgstate.regs[GDB_X86_REG_GS] = 0;
-
+	dbgstate.regs = regs;
 	if ((trapnr == 1) || (trapnr == 3)) {
 		dbgstate.signr = 5; // SIGTRAP
 	} else {
@@ -74,38 +49,12 @@ void ukplat_gdb_handle_trap(int trapnr, struct __regs *regs,
 	}
 
 	uk_pr_debug("DEBUG TRAP: %d, rip: 0x%lx\n", dbgstate.signr,
-		dbgstate.regs[GDB_X86_REG_RIP]);
+		dbgstate.regs->rip);
 
 	int r = uk_gdb_trap(&dbgstate);
-	if (r == 1) { /* Single step */
-		dbgstate.regs[GDB_X86_REG_EFLAGS] |= 1 << 8;
-	} else {
-		dbgstate.regs[GDB_X86_REG_EFLAGS] &= ~(1 << 8);
+	if (r == GDB_DBG_STEP) { /* Single step */
+		dbgstate.regs->eflags |= 1 << 8;
+	} else { /* Continue */
+		dbgstate.regs->eflags &= ~(1 << 8);
 	}
-
-	regs->rax = dbgstate.regs[GDB_X86_REG_RAX];
-	regs->rbx = dbgstate.regs[GDB_X86_REG_RBX];
-	regs->rcx = dbgstate.regs[GDB_X86_REG_RCX];
-	regs->rdx = dbgstate.regs[GDB_X86_REG_RDX];
-	regs->rsi = dbgstate.regs[GDB_X86_REG_RSI];
-	regs->rdi = dbgstate.regs[GDB_X86_REG_RDI];
-	regs->rbp = dbgstate.regs[GDB_X86_REG_RBP];
-	regs->rsp = dbgstate.regs[GDB_X86_REG_RSP];
-	regs->r8 = dbgstate.regs[GDB_X86_REG_R8];
-	regs->r9 = dbgstate.regs[GDB_X86_REG_R9];
-	regs->r10 = dbgstate.regs[GDB_X86_REG_R10];
-	regs->r11 = dbgstate.regs[GDB_X86_REG_R11];
-	regs->r12 = dbgstate.regs[GDB_X86_REG_R12];
-	regs->r13 = dbgstate.regs[GDB_X86_REG_R13];
-	regs->r14 = dbgstate.regs[GDB_X86_REG_R14];
-	regs->r15 = dbgstate.regs[GDB_X86_REG_R15];
-
-	regs->rip = dbgstate.regs[GDB_X86_REG_RIP];
-	regs->eflags = dbgstate.regs[GDB_X86_REG_EFLAGS];
-	regs->cs = dbgstate.regs[GDB_X86_REG_CS];
-	regs->ss = dbgstate.regs[GDB_X86_REG_SS];
-	// dbgstate.regs[GDB_X86_REG_DS];
-	// dbgstate.regs[GDB_X86_REG_ES];
-	// dbgstate.regs[GDB_X86_REG_FS];
-	// dbgstate.regs[GDB_X86_REG_GS];
 }

@@ -36,11 +36,14 @@
 #include <uk/arch/lcpu.h>
 
 struct gdb_dbgstate {
-	unsigned long regs[GDB_REG_NUM];
+	struct __regs *regs;
 	int signr;
 };
 
-void uk_gdb_init(void);
+#define GDB_DBG_CONT 1
+#define GDB_DBG_STEP 2
+
+int uk_gdb_init(void);
 int uk_gdb_trap(struct gdb_dbgstate *dbgstate);
 
 #endif /* __UKDEBUG_GDBSTUB__ */
